@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import metaversefile from 'metaversefile'
 const { useApp, useWear, useUse, usePhysics, useCleanup, useLoaders } = metaversefile
 
@@ -106,15 +107,23 @@ export default () => {
     //
     
     geometries8Parts.forEach((geometry, i) => {
-      const mesh = new THREE.Mesh(geometry, material);
-      meshes.push(mesh);
+      // const mesh = new THREE.Mesh(geometry, material);
+      // meshes.push(mesh);
       const x = i < 4 ? -0.5 : 0.5;
       const y = i % 4 < 2 ? -0.5 : 0.5;
       const z = i % 2 < 1 ? -0.5 : 0.5;
-      mesh.position.set(x - 3, y, z);
-      app.add(mesh);
-      mesh.updateMatrixWorld();
+      // mesh.position.set(x - 3, y, z);
+      // app.add(mesh);
+      // mesh.updateMatrixWorld();
+      geometry.translate(x - 3, y, z);
     })
+
+    const separatedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries8Parts);
+    const mesh = new THREE.Mesh(separatedGeometry, material);
+    meshes.push(mesh);
+    app.add(mesh);
+    mesh.updateMatrixWorld();
+
   })()
 
   useCleanup(() => {
